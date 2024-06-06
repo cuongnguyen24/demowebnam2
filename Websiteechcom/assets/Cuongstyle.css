@@ -1,0 +1,278 @@
+/* Thanh chú thích vd: Trang chủ / Yêu thích */
+.main__layout {
+    /* width: 100%;
+    margin-top: 20px;
+    box-sizing: border-box;
+    font-family: sans-serif; */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    padding: 20px;
+    padding-bottom:900px;
+    margin: 0 auto;
+}
+
+
+
+.main__layout__container{
+    max-width: 1140px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0 auto;
+}
+
+.wrapper{
+    max-width: 1140px;
+    width: 100%;
+}
+
+.breadcrumb{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.breadcrumb div{
+    display: flex;
+    align-items: center; 
+    color: #58595B;
+}
+
+.breadcrumb a{
+    color: #58595B;
+}
+
+.breadcrumb__span {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.breadcrumb__span span{
+    color: #58595B;
+    margin-left: 5px;
+}
+
+.breadcrumb__span div {
+    margin: 0 5px;
+}
+
+.breadcrumb__span span {
+    white-space: nowrap;
+}
+
+/* chức năng yêu thích */
+
+.main__container{
+    width: 100%;
+}
+
+.wishlist{
+    max-width: 1140px;
+    margin: 0 auto;
+    /* border: 1px solid; */
+    margin-top: 20px;
+    border-radius: 10px;
+    padding-bottom: 30px;
+}
+
+.wishlist .wishlist__content{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.wishlist__content__row{
+    width: calc(100% / 2);
+    border: 1px solid #d0b49e;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.wishlist .wishlist__content .wishlist__content__1{
+    display: flex;
+    
+}
+
+.wishlist .wishlist__content .wishlist__content__1 .wishlist__content__1__pic{
+    padding: 10px;
+}
+
+.wishlist__content__1__pic a img{
+    width: 200px;
+    border-radius: 10px;
+}
+
+.wishlist .wishlist__content .wishlist__content__1 .wishlist__content__1__content{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.wishlist__content__1__content a{
+    font-size: 120%;
+    font-weight: 600;
+}
+
+.wishlist__content__1__content .price{
+    color: red;
+    font-size: large;
+    font-weight: 600;
+    padding-top: 20px;
+
+}
+
+.wishlist__content__1__content .button__action{
+    display: flex;
+    justify-content: space-around;
+    padding-top: 40px;
+    
+}
+
+/* Xong chức năng yêu thích  */
+
+/* Chức năng đăng ký */
+
+/* Reset CSS */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+.container {
+    max-width: 1140px;
+    width: 100%;
+}
+
+/* Form layout */
+#auth-form {
+    width: 100%;
+    padding-top: 70px;
+    padding-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.auth-form-body{
+    width: 33%;
+    color: #58595b;
+}
+
+.auth-heading h1 {
+    font-size: 20px;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 10px 0 20px;
+    color: #58595b;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 0rem;
+}
+
+.form-group input {
+    height: 40px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 0;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.input-field[type="text" i],
+.input-field[type="email" i],
+.input-field[type="password" i] {
+    padding-block: 1px;
+    padding-inline: 2px;
+}
+
+.input-field[type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.input-field[type="password" i] {
+    -webkit-text-security: disc !important;
+}
+
+.btn {
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #fff;
+    background-color: #58595B;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.btn:hover {
+    background-color: #4e5052;
+}
+
+.auth-back-btn a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    border: 1px solid #58595B;
+    padding: 10px;
+    margin-top: 15px;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #58595B;
+}
+
+.auth-back-btn a:hover {
+    background-color: #58595B;
+    color: #fff;
+}
+
+.d-none {
+    display: none !important;
+}
+
+
+#auth-form .auth-form-body .register_form p.notify {
+    font-size: 12px;
+    line-height: 18px;
+    font-style: italic;
+    font-weight: 800;
+    color: #d0b49e;
+    margin-bottom: 5px;
+}
+
+.col-6{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
