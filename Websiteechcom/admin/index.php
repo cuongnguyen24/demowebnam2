@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,7 +35,7 @@
                 </div>
 
                 <div class="header--mid__nav">
-                    <button class="header__btn js-LogIn" data-action="account" >
+                    <button class="header__btn js-LogIn" data-action="account">
                         <strong>Tài khoản</strong>
                         <i class="fa-solid fa-user-pen"></i>
                     </button>
@@ -91,10 +94,7 @@
 
     </header>
     <div class="main__layout">
-        <!-- <img src="../assets/img/cover___banner_web_website_1440x450_29768825b3d84005a3c489e63103dc3d.webp" alt="" width="100%"> -->
     </div>
-
-
     <footer class="footer">
         <div class="container">
             <div class="footer--top">
@@ -157,87 +157,119 @@
         </div>
     </footer>
 
-
-    
-    <div class="model_LogIn js-model_LogIn">
-        <div class="model-container js-model-container">
-        <div class="model_LogIn_Close js-model_LogIn-close">
-            <i  class="fa-solid fa-xmark"></i>
-            </div>
-            <div class="row">
-                <div class="col_login">
-                    <div style="padding-bottom: 15px;">
-                        <img src="../assets/img/logo.webp" alt="logo">
-                    </div>
-                    
-                    <div class="sub-nav">
-                        <div class="btn login" style="background-color: rgba(0,0,0,0.03);">Đăng nhập
-                        </div>
-                        <div class="btn register"><a href="../account_register.php"> Đăng ký</a>
-
-                        </div>
-                    </div>
+    <form action="" method="POST">
+        <div class="model_LogIn js-model_LogIn">
+            <div class="model-container js-model-container">
+                <div class="model_LogIn_Close js-model_LogIn-close">
+                    <i class="fa-solid fa-xmark"></i>
                 </div>
-                <div class="col_form">
-                    <div class="tab-content">
-                        <div id="modelLogIn">
-                            <h5 class="header-content">
-                                ĐĂNG NHẬP VỚI MẬT KHẨU
-                            </h5>
-                            <div class="login-form-body">
-                                <form action="">
-                                    <div class="form-group">
-                                        <label for="">Tên tài khoản</label>
-                                        <label for=""><a href="">Đăng nhập với OTP</a></label>
-                                        <input type="text" class="form-control">
-                                    </div>
+                <div class="row">
+                    <div class="col_login">
+                        <div style="padding-bottom: 15px;">
+                            <img src="../assets/img/logo.webp" alt="logo">
+                        </div>
 
-                                    <div class="form-group">
-                                        <label for="">Mật khẩu</label>
-                                        
-                                        <input type="text" class="form-control">
-                                    </div>
+                        <div class="sub-nav">
+                            <div class="btn login" style="background-color: rgba(0,0,0,0.03);">Đăng nhập
+                            </div>
+                            <!-- admin ko thể đăng kí -->
+                            <div class="btn register"><a href=""> Đăng ký</a>
 
-                                    <div class="login-btn">
-                                        <button type="submit" value="">Đăng nhập</button>
-                                    </div>
-                                    <a href="" class="forget_pass" >QUÊN MẬT KHẨU?</a>
-                                </form>
                             </div>
                         </div>
                     </div>
+                    <div class="col_form">
+                        <div class="tab-content">
+                            <div id="modelLogIn">
+                                <h5 class="header-content">
+                                    ĐĂNG NHẬP VỚI MẬT KHẨU
+                                </h5>
+                                <div class="login-form-body">
+                                    <form action="">
+                                        <div class="form-group">
+                                            <label for="">Tên tài khoản</label>
+                                            <label for=""><a href="">Đăng nhập với OTP</a></label>
+                                            <input type="text" class="form-control" name="user_name_lg">
+                                        </div>
 
+                                        <div class="form-group">
+                                            <label for="">Mật khẩu</label>
+                                            <input type="text" class="form-control" name="passlg">
+                                        </div>
+
+                                        <div class="login-btn">
+                                            <button type="submit" name="dangnhap">Đăng nhập</button>
+                                        </div>
+                                        <a href="" class="forget_pass">QUÊN MẬT KHẨU?</a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-     <!-- login -->
+    </form>
+    <!-- login -->
     <script>
-            const LogIn = document.querySelector('.js-LogIn');
-            const model_LogIn = document.querySelector('.js-model_LogIn');
-            const model_LogIn_Close = document.querySelector('.js-model_LogIn-close');
-            const model_LogIn_Container = document.querySelector('.js-model-container');
-            // hiển thị module đăng nhập
-            function showLogIn()
-            {
-                model_LogIn.classList.add('open');
-            }
-            // ẩn module đăng nhập
-            function hideLogIn() {
+        const LogIn = document.querySelector('.js-LogIn');
+        const model_LogIn = document.querySelector('.js-model_LogIn');
+        const model_LogIn_Close = document.querySelector('.js-model_LogIn-close');
+        const model_LogIn_Container = document.querySelector('.js-model-container');
+        // hiển thị module đăng nhập
+        function showLogIn() {
+            model_LogIn.classList.add('open');
+        }
+        // ẩn module đăng nhập
+        function hideLogIn() {
             model_LogIn.classList.remove('open');
-            }
+        }
 
-            // Xử lý sự kiện click để mở mô-đun
-            LogIn.addEventListener('click', showLogIn);
+        // Xử lý sự kiện click để mở mô-đun
+        LogIn.addEventListener('click', showLogIn);
 
-            // Xử lý sự kiện click để đóng mô-đun
-            model_LogIn_Close.addEventListener('click', hideLogIn);
+        // Xử lý sự kiện click để đóng mô-đun
+        model_LogIn_Close.addEventListener('click', hideLogIn);
 
-            model_LogIn.addEventListener('click', hideLogIn);
-            model_LogIn_Container.addEventListener('click', function(event) {
-                event.stopPropagation();
-            });
+        model_LogIn.addEventListener('click', hideLogIn);
+        model_LogIn_Container.addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
     </script>
+
+    <?php
+    $conn = mysqli_connect('localhost', 'root', '', 'webbanhang');
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    if (isset($_POST["dangnhap"])) {
+        $tk = $_POST["user_name_lg"];
+        $mk = $_POST["passlg"];
+
+        $sql = "SELECT * FROM taikhoan WHERE tenTaiKhoan = '$tk' AND matKhau = '$mk'";
+        $result = mysqli_query($conn, $sql);
+        if ($result) {
+            if (mysqli_num_rows($result) == 1) {
+                $row = mysqli_fetch_assoc($result);
+                $_SESSION["loged"] = true;
+                $_SESSION["usernamecustomer"] = $tk;
+                echo '<script>
+                    alert("Đăng nhập thành công");
+                    window.location.href = "accountadmin.php";
+                </script>';
+                setcookie("success", "Đăng nhập thành công!", time() + 24 * 3600, "/", "", 0);
+                exit();
+            } else {
+                echo '<script>alert("Đăng nhập không thành công. Tên tài khoản hoặc mật khẩu không đúng.");</script>';
+                setcookie("error", "Đăng nhập không thành công!", time() + 24 * 3600, "/", "", 0);
+            }
+        } else {
+            echo "Lỗi trong quá trình thực hiện truy vấn: " . mysqli_error($conn);
+        }
+    }
+    ?>
+
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 <?php
 session_start();
+$username = $_SESSION["usernamecustomer"]; // Lấy tên tài khoản từ session
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,9 +8,10 @@ session_start();
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Khách hàng</title>
+  <title>Document</title>
   <link rel="stylesheet" href="./assets/style.css" />
   <link rel="stylesheet" href="./assets/reset.css" />
+  <link rel="stylesheet" href="./assets/Cuongstyle.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
@@ -35,22 +37,16 @@ session_start();
         </div>
 
         <div class="header--mid__nav">
-          <button class="header__btn js-LogIn" data-action="account">
+          <button class="header__btn" data-action="account">
             <strong>Tài khoản</strong>
             <i class="fa-solid fa-user-pen"></i>
           </button>
 
-          <button class="header__btn" data-action="wishlist" onclick="goToWishList()">
+          <button class="header__btn" data-action="wishlist">
             <strong>Yêu thích</strong>
             <i class="fa-solid fa-heart"></i>
             <span class="wishlist-count count">0</span>
           </button>
-
-          <script>
-            function goToWishList() {
-              window.location.href = "wishlist.php";
-            }
-          </script>
 
           <button class="header__btn" data-action="cart">
             <strong>Giỏ hàng</strong>
@@ -62,7 +58,7 @@ session_start();
       <div class="header--bot">
         <ul class="header__menu">
           <li>
-            <a href="">Giới thiệu Nous</a>
+            <a href="#">Giới thiệu Nous</a>
           </li>
           <li class="hasChild thoi-trang-so-sinh">
             <a href="">Thời trang sơ sinh
@@ -141,11 +137,79 @@ session_start();
       </div>
     </div>
   </header>
-  <div class="main__layout">
-    <img src="./assets/img/cover___banner_web_website_1440x450_29768825b3d84005a3c489e63103dc3d.webp" alt="" width="100%" />
 
+  <div class="main__layout__account">
+    <div class="main__layout__container main__layout__container__2">
+      <div class="card card-left" style="width: 30%; height: 100%">
+        <div class="card-body">
+          <h2 class="card-title">
+            <div class="user-icon">
+              <i class="fa-regular fa-user"></i>
+            </div>
+            <?php
+            $conn = mysqli_connect('localhost', 'root', '', 'webbanhang');
+            if (!$conn) {
+              die("Connection failed: " . mysqli_connect_error());
+            }
+            $sql = "SELECT khachhang.hoTen, khachhang.email, khachhang.soDienThoai FROM taikhoan
+            INNER JOIN khachhang ON taikhoan.maTaiKhoan = khachhang.maTaiKhoan WHERE taikhoan.tenTaiKhoan = '$username'";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+              while ($row = mysqli_fetch_assoc($result)) {
+                $name = $row["hoTen"];
+                $mail = $row["email"];
+                $sdt = $row["soDienThoai"];
+              }
+            } else {
+              echo "Không có kết quả";
+            }
+            mysqli_close($conn);
+            ?>
+            <?php echo $name; ?>
+          </h2>
+          <hr>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <p><a class="link-opacity-100 text-body-secondary" href="#">Chỉnh sửa thông tin</a></p>
+          </li>
+          <hr>
+          <li class="list-group-item">
+            <p><a class="link-opacity-100 text-body-secondary" href="#">Đơn hàng</a></p>
+          </li>
+          <hr>
+          <li class="list-group-item">
+            <p><a class="link-opacity-100 text-body-secondary" href="#">Địa chỉ giao hàng</a></p>
+          </li>
+          <hr>
+          <li class="list-group-item">
+            <p><a class="link-opacity-100 text-body-secondary" href="./logout.php">Đăng Xuất</a></p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card card-right" style="width: 70%;">
+        <div class="card-body">
+          <h5 class="card-title">Thông tin tài khoản</h5>
+          <hr>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <p>Tên: <?php echo $name; ?><br>
+                Email: <?php echo $mail; ?><br>
+                Số điện thoại: <?php echo $sdt; ?></p>
+            </li>
+            <hr>
+            <li class="list-group-item">
+              <p><a class="link-opacity-100 text-body-secondary" href="">Xem địa chỉ</a></p>
+            </li>
+          </ul>
+          <a href="#" class="btn btn-primary text-bg-secondary">Đổi mật khẩu</a>
+        </div>
+      </div>
+    </div>
 
   </div>
+
   <footer class="footer">
     <div class="container">
       <div class="footer--top">
@@ -216,114 +280,12 @@ session_start();
     </div>
   </footer>
 
-  <form action="" method="POST">
-    <div class="model_LogIn js-model_LogIn">
-      <div class="model-container js-model-container">
-        <div class="model_LogIn_Close js-model_LogIn-close">
-          <i class="fa-solid fa-xmark"></i>
-        </div>
-        <div class="row">
-          <div class="col_login">
-            <div style="padding-bottom: 15px;">
-              <img src="./assets/img/logo.webp" alt="logo">
-            </div>
-
-            <div class="sub-nav">
-              <div class="btn login" style="background-color: rgba(0,0,0,0.03);">Đăng nhập
-              </div>
-              <div class="btn register"><a href="./account_register.php"> Đăng ký</a>
-
-              </div>
-            </div>
-          </div>
-          <div class="col_form">
-            <div class="tab-content">
-              <div id="modelLogIn">
-                <h5 class="header-content">
-                  ĐĂNG NHẬP VỚI MẬT KHẨU
-                </h5>
-                <div class="login-form-body">
-                  <form action="">
-                    <div class="form-group">
-                      <label for="">Tên tài khoản</label>
-                      <label for=""><a href="">Đăng nhập với OTP</a></label>
-                      <input type="text" class="form-control" name="user_name_lg">
-                    </div>
-
-                    <div class="form-group">
-                      <label for="">Mật khẩu</label>
-                      <input type="text" class="form-control" name="passlg">
-                    </div>
-
-                    <div class="login-btn">
-                      <button type="submit" name="dangnhap">Đăng nhập</button>
-                    </div>
-                    <a href="" class="forget_pass">QUÊN MẬT KHẨU?</a>
-                  </form>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </form>
-  <!-- login -->
-  <script>
-    const LogIn = document.querySelector('.js-LogIn');
-    const model_LogIn = document.querySelector('.js-model_LogIn');
-    const model_LogIn_Close = document.querySelector('.js-model_LogIn-close');
-    const model_LogIn_Container = document.querySelector('.js-model-container');
-    // hiển thị module đăng nhập
-    function showLogIn() {
-      model_LogIn.classList.add('open');
-    }
-    // ẩn module đăng nhập
-    function hideLogIn() {
-      model_LogIn.classList.remove('open');
-    }
-
-    // Xử lý sự kiện click để mở mô-đun
-    LogIn.addEventListener('click', showLogIn);
-
-    // Xử lý sự kiện click để đóng mô-đun
-    model_LogIn_Close.addEventListener('click', hideLogIn);
-
-    model_LogIn.addEventListener('click', hideLogIn);
-    model_LogIn_Container.addEventListener('click', function(event) {
-      event.stopPropagation();
-    });
-  </script>
-
   <?php
   $conn = mysqli_connect('localhost', 'root', '', 'webbanhang');
   if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
   }
-  if (isset($_POST["dangnhap"])) {
-    $tk = $_POST["user_name_lg"];
-    $mk = $_POST["passlg"];
 
-    $sql = "SELECT * FROM taikhoan WHERE tenTaiKhoan = '$tk' AND matKhau = '$mk'";
-    $result = mysqli_query($conn, $sql);
-    if ($result) {
-      if (mysqli_num_rows($result) == 1) {
-        $row = mysqli_fetch_assoc($result);
-        $_SESSION["loged"] = true;
-        $_SESSION["usernamecustomer"] = $tk;
-        echo '<script>
-                    alert("Đăng nhập thành công");
-                    window.location.href = "accountcustomer.php";
-                </script>';
-        exit();
-      } else {
-        echo '<script>alert("Đăng nhập không thành công. Tên tài khoản hoặc mật khẩu không đúng.");</script>';
-      }
-    } else {
-      echo "Lỗi trong quá trình thực hiện truy vấn: " . mysqli_error($conn);
-    }
-  }
   ?>
 </body>
 
