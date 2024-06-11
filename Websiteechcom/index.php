@@ -37,11 +37,11 @@ session_start();
         <div class="header--mid__nav">
           <!-- ẩn đăng nhập khi đã đăng nhập -->
           <?php
-            if (isset($_SESSION["loged"])) {
-              echo '<a href="accountcustomer.php" class="header__btn"><strong>Tài khoản</strong><i class="fa-solid fa-user-pen"></i></a>';
-            } elseif (!isset($_SESSION["loged"])) {
-              echo '<button class="header__btn js-LogIn" data-action="account"><strong>Tài khoản</strong><i class="fa-solid fa-user-pen"></i></button>';
-            }
+          if (isset($_SESSION["loged"])) {
+            echo '<a href="accountcustomer.php" class="header__btn"><strong>Tài khoản</strong><i class="fa-solid fa-user-pen"></i></a>';
+          } elseif (!isset($_SESSION["loged"])) {
+            echo '<button class="header__btn js-LogIn" data-action="account"><strong>Tài khoản</strong><i class="fa-solid fa-user-pen"></i></button>';
+          }
           ?>
 
           <button class="header__btn" data-action="wishlist" onclick="goToWishList()">
@@ -319,28 +319,27 @@ session_start();
       if (mysqli_num_rows($result) == 1) {
         $row = mysqli_fetch_assoc($result);
         $_SESSION["loged"] = true;
-        $_SESSION["usernamecustomer"] = $tk;
+        $_SESSION["username"] = $tk;
         $role = $row['tenPhanQuyen'];
-        if($role == 'admin'){
+        if ($role == 'admin') {
           echo '<script>
                     alert("Đăng nhập thành công");
                     window.location.href = "./admin/accountadmin.php";
                 </script>';
           exit();
-        }else if($role == 'customer'){
+        } else if ($role == 'customer') {
           echo '<script>
                     alert("Đăng nhập thành công");
                     window.location.href = "accountcustomer.php";
                 </script>';
           exit();
-        }else if($role == 'staff'){
+        } else if ($role == 'staff') {
           echo '<script>
                     alert("Đăng nhập thành công");
                     window.location.href = "accountstaff.php";
                 </script>';
           exit();
         }
-        
       } else {
         echo '<script>alert("Đăng nhập không thành công. Tên tài khoản hoặc mật khẩu không đúng.");</script>';
       }

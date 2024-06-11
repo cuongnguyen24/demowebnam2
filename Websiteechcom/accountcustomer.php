@@ -1,6 +1,6 @@
 <?php
 session_start();
-$username = $_SESSION["usernamecustomer"]; // Lấy tên tài khoản từ session
+$username = $_SESSION["username"]; // Lấy tên tài khoản từ session
 ?>
 <!DOCTYPE html>
 <html lang="en">

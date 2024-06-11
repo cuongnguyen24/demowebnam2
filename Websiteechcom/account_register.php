@@ -1,3 +1,81 @@
+<?php
+$connect = mysqli_connect('localhost', 'root', '', 'webbanhang');
+mysqli_set_charset($connect, "utf8");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // Lấy dữ liệu từ form và gọi hàm lưu dữ liệu vào CSDL
+  $name = $_POST["fullName"];
+  $gender = $_POST['gender'];
+
+  $email = $_POST["mail"];
+  $phone = $_POST["phoneNumber"];
+  $username = $_POST["username"];
+  $password = $_POST["password"];
+  $confirmpass = $_POST["confirmPassword"];
+
+  // Kiểm tra trùng lặp email, số điện thoại và tên tài khoản
+  $emailCondition = $email ? "khachhang.email = '$email'" : "khachhang.email IS NULL";
+  // khachhang.email IS NULL
+  $checkQuery = "SELECT * FROM khachhang 
+    INNER JOIN taikhoan ON khachhang.maTaiKhoan = taikhoan.maTaiKhoan 
+    WHERE ($emailCondition) OR khachhang.soDienThoai = '$phone' OR taikhoan.tenTaiKhoan = '$username'";
+
+  $checkResult = mysqli_query($connect, $checkQuery);
+  if (mysqli_num_rows($checkResult) > 0) {
+    echo "<script>alert('Email, số điện thoại hoặc tên tài khoản đã tồn tại. Vui lòng nhập lại.'); window.history.back();</script>";
+    exit();
+  }
+
+  // Tạo mã tài khoản mới
+  // lấy mã tk theo thứ tự giảm dần và lấy dòng đầu tiên - tk cao nhất
+  $getLastAccountQuery = "SELECT maTaiKhoan FROM taikhoan ORDER BY maTaiKhoan DESC LIMIT 1";
+  // Thực hiện truy vấn
+  $lastAccountResult = mysqli_query($connect, $getLastAccountQuery);
+  // lấy dòng đầu tiên của kết quả truy vấn
+  $lastAccountRow = mysqli_fetch_assoc($lastAccountResult);
+  // Hàm substr cắt chuỗi mã tài khoản từ ký tự thứ 3 trở đi (bỏ qua hai ký tự đầu tiên, là "tk"); intval: sẽ chuyển 01 thành 1
+  $lastAccountNumber = intval(substr($lastAccountRow['maTaiKhoan'], 2));
+  //lastAccountNumber + 1: tăng lên 1
+  //str_pad($lastAccountNumber + 1, 2, "0", STR_PAD_LEFT);
+  //Hàm str_pad thêm số "0" vào bên trái của số mới tạo để đảm bảo rằng số này có ít nhất 2 ký tự. Tham số 2 là độ dài tối thiểu của chuỗi kết quả
+  $newAccountNumber = str_pad($lastAccountNumber + 1, 2, "0", STR_PAD_LEFT);
+  $newAccountId = "tk" . $newAccountNumber;
+
+  // Tạo mã khách hàng mới
+  // Như tạo mã tài khoản mới
+  $getLastCustomerQuery = "SELECT maKhachHang FROM khachhang ORDER BY maKhachHang DESC LIMIT 1";
+  $lastCustomerResult = mysqli_query($connect, $getLastCustomerQuery);
+  $lastCustomerRow = mysqli_fetch_assoc($lastCustomerResult);
+  $lastCustomerNumber = intval(substr($lastCustomerRow['maKhachHang'], 2));
+  $newCustomerNumber = str_pad($lastCustomerNumber + 1, 2, "0", STR_PAD_LEFT);
+  $newCustomerId = "kh" . $newCustomerNumber;
+
+  // Xử lý email rỗng
+  $emailValue = $email ? "'$email'" : "IS NULL";
+  // IS NULL
+
+  // Thêm tài khoản mới
+  // gán mặc định khi đăng ký là khách hàng với mã phân quyền là 3
+  $insertAccountQuery = "
+        INSERT INTO taikhoan (maTaiKhoan, tenTaiKhoan, matKhau, maPhanQuyen) 
+        VALUES ('$newAccountId', '$username', '$password', 3) 
+    ";
+  // Thêm khách hàng mới
+  $insertCustomerQuery = "
+        INSERT INTO khachhang (maKhachHang, hoTen, email, soDienThoai, maTaiKhoan) 
+        VALUES ('$newCustomerId', '$name', '$emailValue', '$phone', '$newAccountId')
+    ";
+
+  if (mysqli_query($connect, $insertAccountQuery) && mysqli_query($connect, $insertCustomerQuery)) {
+    echo "<script>alert('Tạo tài khoản thành công!'); window.location.href='index.php';</script>";
+    exit();
+  } else {
+    echo "Error: " . $insertAccountQuery . "<br>" . mysqli_error($connect);
+  }
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -140,11 +218,11 @@
         <div class="title_register">ĐĂNG KÝ</div>
       </div>
       <div class="main__layout_register_container_content">
-        <form id="registerForm">
+        <form id="registerForm" method="post">
           <div class="register_form">
             <div class="register_form_group">
               <label>Họ và tên*</label>
-              <input type="text" id="fullName">
+              <input type="text" id="fullName" name="fullName">
               <span id="fullNameError" style="color: red;"></span>
             </div>
             <div class="register_form_group">
@@ -164,27 +242,27 @@
             </div>
             <div class="register_form_group">
               <label>Email</label>
-              <input type="text">
+              <input type="text" name="mail">
             </div>
             <div class="register_form_group">
               <label>Số điện thoại*</label>
-              <input type="text" id="phoneNumber">
+              <input type="text" id="phoneNumber" name="phoneNumber">
               <span id="phoneError" style="color: red;"></span>
             </div>
 
             <div class="register_form_group">
               <label>Tên tài khoản*</label>
-              <input type="text" id="username">
+              <input type="text" id="username" name="username">
               <span id="usernameError" style="color: red;"></span>
             </div>
             <div class="register_form_group">
               <label>Mật khẩu*</label>
-              <input type="password" id="password">
+              <input type="password" id="password" name="password">
               <span id="passwordError" style="color: red;"></span>
             </div>
             <div class="register_form_group">
               <label>Nhập lại mật khẩu*</label>
-              <input type="password" id="confirmPassword">
+              <input type="password" id="confirmPassword" name="confirmPassword">
               <span id="confirmPasswordError" style="color: red;"></span>
             </div>
             <div class="register_form_group">
