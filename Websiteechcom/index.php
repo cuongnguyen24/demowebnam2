@@ -35,10 +35,14 @@ session_start();
         </div>
 
         <div class="header--mid__nav">
-          <button class="header__btn js-LogIn" data-action="account">
-            <strong>Tài khoản</strong>
-            <i class="fa-solid fa-user-pen"></i>
-          </button>
+          <!-- ẩn đăng nhập khi đã đăng nhập -->
+          <?php
+            if (isset($_SESSION["loged"])) {
+              echo '<a href="accountcustomer.php" class="header__btn"><strong>Tài khoản</strong><i class="fa-solid fa-user-pen"></i></a>';
+            } elseif (!isset($_SESSION["loged"])) {
+              echo '<button class="header__btn js-LogIn" data-action="account"><strong>Tài khoản</strong><i class="fa-solid fa-user-pen"></i></button>';
+            }
+          ?>
 
           <button class="header__btn" data-action="wishlist" onclick="goToWishList()">
             <strong>Yêu thích</strong>
@@ -140,6 +144,7 @@ session_start();
         </ul>
       </div>
     </div>
+
   </header>
   <div class="main__layout">
     <img src="./assets/img/cover___banner_web_website_1440x450_29768825b3d84005a3c489e63103dc3d.webp" alt="" width="100%" />
@@ -252,7 +257,7 @@ session_start();
 
                     <div class="form-group">
                       <label for="">Mật khẩu</label>
-                      <input type="text" class="form-control" name="passlg">
+                      <input type="password" class="form-control" name="passlg">
                     </div>
 
                     <div class="login-btn">
@@ -305,18 +310,37 @@ session_start();
     $tk = $_POST["user_name_lg"];
     $mk = $_POST["passlg"];
 
-    $sql = "SELECT * FROM taikhoan WHERE tenTaiKhoan = '$tk' AND matKhau = '$mk'";
+    $sql = "SELECT tk.*, pq.tenPhanQuyen 
+            FROM taikhoan tk
+            JOIN phanquyen pq ON tk.maPhanQuyen = pq.maPhanQuyen
+            WHERE tenTaiKhoan = '$tk' AND matKhau = '$mk'";
     $result = mysqli_query($conn, $sql);
     if ($result) {
       if (mysqli_num_rows($result) == 1) {
         $row = mysqli_fetch_assoc($result);
         $_SESSION["loged"] = true;
         $_SESSION["usernamecustomer"] = $tk;
-        echo '<script>
+        $role = $row['tenPhanQuyen'];
+        if($role == 'admin'){
+          echo '<script>
+                    alert("Đăng nhập thành công");
+                    window.location.href = "./admin/accountadmin.php";
+                </script>';
+          exit();
+        }else if($role == 'customer'){
+          echo '<script>
                     alert("Đăng nhập thành công");
                     window.location.href = "accountcustomer.php";
                 </script>';
-        exit();
+          exit();
+        }else if($role == 'staff'){
+          echo '<script>
+                    alert("Đăng nhập thành công");
+                    window.location.href = "accountstaff.php";
+                </script>';
+          exit();
+        }
+        
       } else {
         echo '<script>alert("Đăng nhập không thành công. Tên tài khoản hoặc mật khẩu không đúng.");</script>';
       }

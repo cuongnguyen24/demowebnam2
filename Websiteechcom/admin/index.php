@@ -36,8 +36,13 @@ session_start();
 
                 <div class="header--mid__nav">
                     <button class="header__btn js-LogIn" data-action="account">
-                        <strong>Tài khoản</strong>
-                        <i class="fa-solid fa-user-pen"></i>
+                        <?php
+                        if (isset($_SESSION["loged"])) {
+                            echo '<a href="accountadmin.php" class="header__btn"><strong>Tài khoản</strong><i class="fa-solid fa-user-pen"></i></a>';
+                        } elseif (!isset($_SESSION["loged"])) {
+                            echo '<button class="header__btn js-LogIn" data-action="account"><strong>Tài khoản</strong><i class="fa-solid fa-user-pen"></i></button>';
+                        }
+                        ?>
                     </button>
 
                     <button class="header__btn" data-action="manage">
@@ -194,7 +199,7 @@ session_start();
 
                                         <div class="form-group">
                                             <label for="">Mật khẩu</label>
-                                            <input type="text" class="form-control" name="passlg">
+                                            <input type="password" class="form-control" name="passlg">
                                         </div>
 
                                         <div class="login-btn">
@@ -253,7 +258,7 @@ session_start();
             if (mysqli_num_rows($result) == 1) {
                 $row = mysqli_fetch_assoc($result);
                 $_SESSION["loged"] = true;
-                $_SESSION["usernamecustomer"] = $tk;
+                $_SESSION["username"] = $tk;
                 echo '<script>
                     alert("Đăng nhập thành công");
                     window.location.href = "accountadmin.php";

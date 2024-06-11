@@ -1,9 +1,5 @@
 /* Thanh chú thích vd: Trang chủ / Yêu thích */
 .main__layout {
-    /* width: 100%;
-    margin-top: 20px;
-    box-sizing: border-box;
-    font-family: sans-serif; */
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -12,6 +8,18 @@
     padding: 20px;
     padding-bottom:900px;
     margin: 0 auto;
+} 
+
+.main__layout_register{
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    padding: 20px;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    /* padding-bottom:700px; */
 }
 
 .main__layout__account {
@@ -148,144 +156,94 @@
 /* Xong chức năng yêu thích  */
 
 /* Chức năng đăng ký */
-
-/* Reset CSS */
-* {
-    box-sizing: border-box;
+ 
+*{
+    /* box-sizing: border-box; */
     margin: 0;
     padding: 0;
 }
 
-body {
-    font-family: sans-serif;
-}
-
-.container {
-    max-width: 1140px;
-    width: 100%;
-}
-
-/* Form layout */
-#auth-form {
-    width: 100%;
-    padding-top: 70px;
-    padding-bottom: 50px;
+.main__layout_register_container{
+    width: 1140px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
 }
 
-.auth-form-body{
-    width: 33%;
-    color: #58595b;
+.title_register{
+    font-size: x-large;
 }
 
-.auth-heading h1 {
-    font-size: 20px;
-    font-weight: 500;
-    text-transform: uppercase;
-    margin: 10px 0 20px;
-    color: #58595b;
-}
-
-.form-group {
-    margin-bottom: 1rem;
+.main__layout_register_container_content{
     display: flex;
     flex-direction: column;
-}
-
-.form-group label {
-    margin-bottom: 0rem;
-}
-
-.form-group input {
-    height: 40px;
-}
-
-.input-field {
+    max-width: 33%;
     width: 100%;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    border: 1px solid #ced4da;
-    border-radius: 0;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.input-field[type="text" i],
-.input-field[type="email" i],
-.input-field[type="password" i] {
-    padding-block: 1px;
-    padding-inline: 2px;
-}
-
-.input-field[type="radio"] {
-    box-sizing: border-box;
-    padding: 0;
-}
-
-.input-field[type="password" i] {
-    -webkit-text-security: disc !important;
-}
-
-.btn {
-    width: 100%;
-    padding: 0.375rem 0.75rem;
-    font-weight: 400;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #fff;
-    background-color: #58595B;
-    border: none;
-    border-radius: 0;
-    cursor: pointer;
-    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.btn:hover {
-    background-color: #4e5052;
-}
-
-.auth-back-btn a {
-    display: block;
-    width: 100%;
-    text-align: center;
-    border: 1px solid #58595B;
-    padding: 10px;
-    margin-top: 15px;
-    text-decoration: none;
-    text-transform: uppercase;
-    color: #58595B;
-}
-
-.auth-back-btn a:hover {
-    background-color: #58595B;
-    color: #fff;
-}
-
-.d-none {
-    display: none !important;
-}
-
-
-#auth-form .auth-form-body .register_form p.notify {
-    font-size: 12px;
-    line-height: 18px;
-    font-style: italic;
-    font-weight: 800;
-    color: #d0b49e;
-    margin-bottom: 5px;
-}
-
-.col-6{
+.register_form{
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.register_form_group{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     gap: 10px;
 }
 
+.register_form_group input{
+    padding: 10px;
+    margin-bottom: 0px;
+    font-size: medium;
+}
+
+.register_form_group label{
+    margin-top: 8px;
+}
+
+.register_form_group span{
+    font-size: small;
+    margin-bottom: 5px;
+}
+
+.register_form_group .row .col{
+    padding: 0;
+}
+
+.btn-primary-dangky{
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: large;
+    margin-bottom: 20px;
+}
+
+.btn-primary-dangky:hover{
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: large;
+    background-color: #495057;
+    color: #fff;
+    cursor: pointer;
+}
+
+.back-btn{
+    border: 1px solid;
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: large;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+    cursor: pointer;
+}
+/* #ced4da */
 
 /*  accountadmin*/
 .main__layout__container__2{
@@ -350,11 +308,27 @@ body {
 
 .btn-primary{
     width: 100%;
-    border-radius: 5px;
 }
 
 hr{
     color: #dfdfdf;
+} 
+
+.btn-changepass{
+    font-weight: 600;
+    color: black;
+}
+.btn-changepass:hover{
+    font-weight: 600;
+    color: black;
+    text-decoration: underline;
 }
 
+.text-body-secondary{
+    font-weight: 600;
+}
 
+.text-body-secondary:hover{
+    font-weight: 600;
+    text-decoration: underline;
+}

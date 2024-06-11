@@ -58,7 +58,7 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
       <div class="header--bot">
         <ul class="header__menu">
           <li>
-            <a href="#">Thống kê</a>
+            <a href="index.php">Thống kê</a>
           </li>
           <li class="hasChild thoi-trang-so-sinh">
             <a href="">Quản lí danh mục
@@ -110,7 +110,7 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
             if (!$conn) {
               die("Connection failed: " . mysqli_connect_error());
             }
-            $sql = "SELECT quanly.hoTen, quanly.email, quanly.soDienThoai FROM taikhoan
+            $sql = "SELECT quanly.hoTen, quanly.email, quanly.soDienThoai, quanly.diaChi FROM taikhoan
             INNER JOIN quanly ON taikhoan.maTaiKhoan = quanly.maTaiKhoan WHERE taikhoan.tenTaiKhoan = '$username'";
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
@@ -118,6 +118,7 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
                 $name = $row["hoTen"];
                 $mail = $row["email"];
                 $sdt = $row["soDienThoai"];
+                $diachi = $row["diaChi"];
               }
             } else {
               echo "Không có kết quả";
@@ -141,7 +142,7 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
 
       <div class="card card-right" style="width: 70%;">
         <div class="card-body">
-          <h5 class="card-title">Thông tin tài khoản</h5>
+          <h5 class="card-title">Thông tin tài khoản Admin</h5>
           <hr>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
@@ -151,10 +152,10 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
             </li>
             <hr>
             <li class="list-group-item">
-              <p><a class="link-opacity-100 text-body-secondary" href="">Xem địa chỉ</a></p>
+              <p><p>Địa chỉ: <?php echo $diachi; ?></p></p>
             </li>
           </ul>
-          <a href="#" class="btn btn-primary text-bg-secondary">Đổi mật khẩu</a>
+          <a href="#" class="btn-changepass">Đổi mật khẩu</a>
         </div>
       </div>
     </div>

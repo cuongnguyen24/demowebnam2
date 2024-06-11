@@ -134,92 +134,140 @@
     </div>
   </header>
 
-  <div class="main__layout">
-    <div class="my-account-wrap">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 col-sm-6 col-md-4 offset-sm-3 offset-md-4">
-            <div id="auth-form">
-              <div class="auth-heading">
-                <h1>
-                  Đăng ký
-                </h1>
-              </div>
-              <div class="auth-form-body">
-                <div class="register-form-body">
-                  <p class="error" id="error_session"></p>
-                  <form class="register_form">
-                    <div class="form-group">
-                      <label for="register-first-name">Họ và tên của bạn*</label>
-                      <input type="text" id="register-first-name" class="form-control" name="customer[first_name]" required="">
-                    </div>
-                    <div class="form-group">
-                      <label>Giới tính</label>
-                      <div class="row">
-                        <div class="col-6">
-                          <input type="radio" id="register-gender-0" value="0" name="customer[gender]">
-                          <label for="register-gender-0">Nữ</label>
-                        </div>
-                        <div class="col-6">
-                          <input type="radio" id="register-gender-1" value="1" name="customer[gender]">
-                          <label for="register-gender-1">Nam</label>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="register-email">Email</label>
-                      <input type="email" id="register-email" class="form-control" name="customer[email]">
-                      <p class="error" id="error_email"></p>
-                    </div>
-                    <div class="form-group register-numberPhone">
-                      <label for="register-phone">Số điện thoại <span>*</span></label>
-                      <input required="" type="text" id="register-phone" class="form-control" name="customer[phone]" pattern="^\+?\d{0,10}">
-                      <p class="error" id="error_phone"></p>
-                    </div>
-
-                    <div class="form-group register-numberPhone">
-                      <label for="register-phone">Tên tài khoản <span>*</span></label>
-                      <input required="" type="text" id="register-phone" class="form-control" name="customer[phone]">
-                      <p class="error" id="error_phone"></p>
-                    </div>
-
-                    <div class="form-group">
-                      <label for="register-password">Mật khẩu <span>*</span></label>
-                      <p class="notify">Mật khẩu tối thiểu 8 kí tự.</p>
-                      <input required="" type="password" id="register-password" class="form-control" name="customer[password]">
-                      <p class="error" id="error_password"></p>
-                    </div>
-                    <div class="form-group">
-                      <button type="submit" class="btn btn-primary">
-                        ĐĂNG KÝ
-                      </button>
-                    </div>
-                    <div class="auth-back-btn">
-                      <a href="#">Đăng nhập</a>
-                    </div>
-                  </form>
-
-                  <!-- <form class="confirm_otp d-none">
-                    <h5 class="text-center">Vui lòng nhập mã OTP để hoàn tất đăng ký</h5>
-                    <div class="form-group" id="otp_confirm_register">
-                      <label required="" for="register-otp">Mã OTP</label>
-                      <input required="" type="text" id="register-otp" class="form-control" name="customer[opt]">
-                      <p class="error" id="error_otp"></p>
-                      <p class="d-none countdown">
-                        <span id="countdown"></span>
-                        <button id="resend_otp" type="button" disabled="">Gửi lại</button>
-                      </p>
-                    </div>
-                    <button type="button" id="back_form_register" style="margin-bototm: 10px;">Trở lại</button>
-                    <button type="submit" class="btn btn-primary">
-                      Gửi
-                    </button>
-                  </form> -->
+  <div class="main__layout_register">
+    <div class="main__layout_register_container">
+      <div class="main__layout_register_container_head">
+        <div class="title_register">ĐĂNG KÝ</div>
+      </div>
+      <div class="main__layout_register_container_content">
+        <form id="registerForm">
+          <div class="register_form">
+            <div class="register_form_group">
+              <label>Họ và tên*</label>
+              <input type="text" id="fullName">
+              <span id="fullNameError" style="color: red;"></span>
+            </div>
+            <div class="register_form_group">
+              <label>Giới tính</label>
+              <div class="row">
+                <div class="col">
+                  <input type="radio" value="0" name="gender">
+                  </label>Nữ</label>
+                </div>
+                <div class="col">
+                  <div class="col">
+                    <input type="radio" value="1" name="gender">
+                    </label>Nam</label>
+                  </div>
                 </div>
               </div>
             </div>
+            <div class="register_form_group">
+              <label>Email</label>
+              <input type="text">
+            </div>
+            <div class="register_form_group">
+              <label>Số điện thoại*</label>
+              <input type="text" id="phoneNumber">
+              <span id="phoneError" style="color: red;"></span>
+            </div>
+
+            <div class="register_form_group">
+              <label>Tên tài khoản*</label>
+              <input type="text" id="username">
+              <span id="usernameError" style="color: red;"></span>
+            </div>
+            <div class="register_form_group">
+              <label>Mật khẩu*</label>
+              <input type="password" id="password">
+              <span id="passwordError" style="color: red;"></span>
+            </div>
+            <div class="register_form_group">
+              <label>Nhập lại mật khẩu*</label>
+              <input type="password" id="confirmPassword">
+              <span id="confirmPasswordError" style="color: red;"></span>
+            </div>
+            <div class="register_form_group">
+              <button type="submit" class="btn-primary-dangky">ĐĂNG KÝ</button>
+            </div>
+            <hr>
+            <div class="back-btn">
+              <a href="index.php">TRANG CHỦ</a>
+            </div>
           </div>
-        </div>
+        </form>
+        <script>
+          document.getElementById('registerForm').addEventListener('submit', function(event) {
+            // Lấy các giá trị từ các trường input
+            const fullName = document.getElementById('fullName').value.trim();
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+            // Lấy các phần tử hiển thị thông báo lỗi
+            const fullNameError = document.getElementById('fullNameError');
+            const phoneError = document.getElementById('phoneError');
+            const usernameError = document.getElementById('usernameError');
+            const passwordError = document.getElementById('passwordError');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+            // Biến kiểm tra xem có lỗi hay không
+            let hasError = false;
+
+            // Kiểm tra Họ và tên
+            if (fullName === '') {
+              fullNameError.textContent = '*Vui lòng nhập Họ và tên.';
+              hasError = true;
+            } else {
+              fullNameError.textContent = '';
+            }
+
+            // Kiểm tra số điện thoại
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(phoneNumber)) {
+              phoneError.textContent = '*Số điện thoại phải gồm 10 chữ số.';
+              hasError = true;
+            } else {
+              phoneError.textContent = '';
+            }
+
+            // Kiểm tra tên tài khoản
+            if (username === '') {
+              usernameError.textContent = '*Vui lòng nhập Tên tài khoản.';
+              hasError = true;
+            } else {
+              usernameError.textContent = '';
+            }
+
+            // Kiểm tra mật khẩu
+            if (password === '') {
+              passwordError.textContent = '*Vui lòng nhập Mật khẩu.';
+              hasError = true;
+            } else if (password.length < 6) {
+              passwordError.textContent = '*Mật khẩu phải có ít nhất 6 ký tự.';
+              hasError = true;
+            } else {
+              passwordError.textContent = '';
+            }
+
+            // Kiểm tra nhập lại mật khẩu
+            if (confirmPassword === '') {
+              confirmPasswordError.textContent = '*Vui lòng nhập lại Mật khẩu.';
+              hasError = true;
+            } else if (confirmPassword !== password) {
+              confirmPasswordError.textContent = '*Mật khẩu nhập lại không khớp.';
+              hasError = true;
+            } else {
+              confirmPasswordError.textContent = '';
+            }
+
+            // Ngăn chặn gửi biểu mẫu nếu có lỗi
+            if (hasError) {
+              event.preventDefault();
+            }
+          });
+        </script>
       </div>
     </div>
   </div>

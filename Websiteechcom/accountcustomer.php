@@ -58,7 +58,7 @@ $username = $_SESSION["usernamecustomer"]; // Lấy tên tài khoản từ sessi
       <div class="header--bot">
         <ul class="header__menu">
           <li>
-            <a href="#">Giới thiệu Nous</a>
+            <a href="index.php">Giới thiệu Nous</a>
           </li>
           <li class="hasChild thoi-trang-so-sinh">
             <a href="">Thời trang sơ sinh
@@ -151,7 +151,7 @@ $username = $_SESSION["usernamecustomer"]; // Lấy tên tài khoản từ sessi
             if (!$conn) {
               die("Connection failed: " . mysqli_connect_error());
             }
-            $sql = "SELECT khachhang.hoTen, khachhang.email, khachhang.soDienThoai FROM taikhoan
+            $sql = "SELECT khachhang.hoTen, khachhang.email, khachhang.soDienThoai, khachhang.diaChi FROM taikhoan
             INNER JOIN khachhang ON taikhoan.maTaiKhoan = khachhang.maTaiKhoan WHERE taikhoan.tenTaiKhoan = '$username'";
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
@@ -159,6 +159,7 @@ $username = $_SESSION["usernamecustomer"]; // Lấy tên tài khoản từ sessi
                 $name = $row["hoTen"];
                 $mail = $row["email"];
                 $sdt = $row["soDienThoai"];
+                $diachi = $row["diaChi"];
               }
             } else {
               echo "Không có kết quả";
@@ -190,7 +191,7 @@ $username = $_SESSION["usernamecustomer"]; // Lấy tên tài khoản từ sessi
 
       <div class="card card-right" style="width: 70%;">
         <div class="card-body">
-          <h5 class="card-title">Thông tin tài khoản</h5>
+          <h5 class="card-title">Thông tin tài khoản khách hàng</h5>
           <hr>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
@@ -200,10 +201,10 @@ $username = $_SESSION["usernamecustomer"]; // Lấy tên tài khoản từ sessi
             </li>
             <hr>
             <li class="list-group-item">
-              <p><a class="link-opacity-100 text-body-secondary" href="">Xem địa chỉ</a></p>
+              <p>Địa chỉ: <?php echo $diachi; ?></p>
             </li>
           </ul>
-          <a href="#" class="btn btn-primary text-bg-secondary">Đổi mật khẩu</a>
+          <a href="#" class="btn-changepass">Đổi mật khẩu</a>
         </div>
       </div>
     </div>
