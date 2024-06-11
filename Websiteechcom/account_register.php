@@ -5,7 +5,7 @@ mysqli_set_charset($connect, "utf8");
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Lấy dữ liệu từ form và gọi hàm lưu dữ liệu vào CSDL
   $name = $_POST["fullName"];
-  $gender = $_POST['gender'];
+  $gender = isset($_POST['gender']) ? $_POST['gender'] : null;
 
   $email = $_POST["mail"];
   $phone = $_POST["phoneNumber"];
@@ -14,11 +14,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $confirmpass = $_POST["confirmPassword"];
 
   // Kiểm tra trùng lặp email, số điện thoại và tên tài khoản
-  $emailCondition = $email ? "khachhang.email = '$email'" : "khachhang.email IS NULL";
+  // $emailCondition = $email ? "khachhang.email = '$email'" : "khachhang.email IS NULL";
   // khachhang.email IS NULL
   $checkQuery = "SELECT * FROM khachhang 
     INNER JOIN taikhoan ON khachhang.maTaiKhoan = taikhoan.maTaiKhoan 
-    WHERE ($emailCondition) OR khachhang.soDienThoai = '$phone' OR taikhoan.tenTaiKhoan = '$username'";
+    WHERE khachhang.email = '$email' OR khachhang.soDienThoai = '$phone' OR taikhoan.tenTaiKhoan = '$username'";
 
   $checkResult = mysqli_query($connect, $checkQuery);
   if (mysqli_num_rows($checkResult) > 0) {
@@ -51,8 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $newCustomerId = "kh" . $newCustomerNumber;
 
   // Xử lý email rỗng
-  $emailValue = $email ? "'$email'" : "IS NULL";
-  // IS NULL
+  // $emailValue = $email ? "'$email'" : "NULL";
 
   // Thêm tài khoản mới
   // gán mặc định khi đăng ký là khách hàng với mã phân quyền là 3
@@ -63,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Thêm khách hàng mới
   $insertCustomerQuery = "
         INSERT INTO khachhang (maKhachHang, hoTen, email, soDienThoai, maTaiKhoan) 
-        VALUES ('$newCustomerId', '$name', '$emailValue', '$phone', '$newAccountId')
+        VALUES ('$newCustomerId', '$name', '$email', '$phone', '$newAccountId')
     ";
 
   if (mysqli_query($connect, $insertAccountQuery) && mysqli_query($connect, $insertCustomerQuery)) {
