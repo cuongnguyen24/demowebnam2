@@ -1,8 +1,47 @@
 <?php
 session_start();
 $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
-  
+$maKhachHang = $_GET['maKhachHang'];
+$Name = "";
+$Male = "";
+$Bod = "";
+
+$conn = mysqli_connect("localhost", "root", "", "webbanhang");
+if (!$conn) {
+  echo "Ket noi khong thanh cong: " . mysqli_connect_error();
+} else {
+  $sql = "SELECT * FROM khachhang WHERE maKhachHang = '$maKhachHang'";
+  $result = mysqli_query($conn, $sql);
+  if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+      $Name = $row['hoTen'];
+      $Male = $row['gioiTinh'];
+      $Bod = $row['ngaySinh'];
+    }
+  }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // Lấy dữ liệu từ form và gọi hàm cập nhật dữ liệu vào CSDL
+  $fullname = $_POST["fullNameUpdate"];
+  $maleUpdate = $_POST['genderUpdate'];
+  $dateInput = $_POST['birthday'];
+  $convertedDate = date('Y-m-d', strtotime($dateInput));
+
+  $sql = "UPDATE khachhang SET hoTen = '$fullname', gioiTinh = '$maleUpdate', ngaysinh = '$convertedDate' WHERE maKhachHang = '$maKhachHang'";
+
+  if ($conn->query($sql) === TRUE) {
+    echo '<script>
+      alert("Cập nhật dữ liệu thành công");
+      window.location.href = "./accountcustomer.php";
+    </script>';
+    exit();
+  } else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+  }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -152,7 +191,7 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
             if (!$conn) {
               die("Connection failed: " . mysqli_connect_error());
             }
-            $sql = "SELECT khachhang.hoTen, khachhang.email, khachhang.soDienThoai, khachhang.diaChi, khachhang.maKhachHang FROM taikhoan
+            $sql = "SELECT khachhang.hoTen, khachhang.email, khachhang.soDienThoai, khachhang.diaChi FROM taikhoan
             INNER JOIN khachhang ON taikhoan.maTaiKhoan = khachhang.maTaiKhoan WHERE taikhoan.tenTaiKhoan = '$username'";
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
@@ -161,7 +200,6 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
                 $mail = $row["email"];
                 $sdt = $row["soDienThoai"];
                 $diachi = $row["diaChi"];
-                $makhach = $row["maKhachHang"];
               }
             } else {
               echo "Không có kết quả";
@@ -174,7 +212,7 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
         </div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
-            <p><a class="link-opacity-100 text-body-secondary" href="./accountcustomerupdate.php?maKhachHang=<?php echo $makhach; ?>">Chỉnh sửa thông tin</a></p>
+            <p><a class="link-opacity-100 text-body-secondary" href="#">Chỉnh sửa thông tin</a></p>
           </li>
           <hr>
           <li class="list-group-item">
@@ -193,20 +231,39 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
 
       <div class="card card-right" style="width: 70%;">
         <div class="card-body">
-          <h5 class="card-title">Thông tin tài khoản khách hàng</h5>
-          <hr>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <p>Tên: <?php echo $name; ?><br>
-                Email: <?php echo $mail; ?><br>
-                Số điện thoại: <?php echo $sdt; ?></p>
-            </li>
-            <hr>
-            <li class="list-group-item">
-              <p>Địa chỉ: <?php echo $diachi; ?></p>
-            </li>
-          </ul>
-          <a href="#" class="btn-changepass">Đổi mật khẩu</a>
+          <h5 class="card-title">Cập nhật thông tin cá nhân</h5>
+          <form id="updateAccountForm" method="POST">
+            <div class="updateAccount_form">
+              <div class="updateAccount_form_group">
+                <label>Họ và tên</label>
+                <input type="text" id="fullNameUpdate" name="fullNameUpdate" value="<?php echo $Name ?>">
+                <span id="fullNameUpdateError" style="color: red;"></span>
+              </div>
+              <div class="updateAccount_form_group">
+                <label>Giới tính</label>
+                <div class="row">
+                  <div class="col">
+                    <input type="radio" value="0" name="genderUpdate" <?php if ($Male === '0') echo 'checked'; ?>>
+                    </label>Nữ</label>
+                  </div>
+                  <div class="col">
+                    <div class="col">
+                      <input type="radio" value="1" name="genderUpdate" <?php if ($Male === '1') echo 'checked'; ?>>
+                      </label>Nam</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="updateAccount_form_group">
+                <label>Ngày sinh</label>
+                <input type="date" id="birthday" name="birthday" value="<?php echo $Bod; ?>">
+                <span id="birthdayError" style="color: red;"></span>
+              </div>
+              <div class="updateAccount_form_group">
+                <button type="submit" class="btn-primary-update">Cập nhật</button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

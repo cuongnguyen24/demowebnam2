@@ -332,3 +332,71 @@ hr{
     font-weight: 600;
     text-decoration: underline;
 }
+
+/* Cập nhật thông tin */
+.updateAccount_form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 50%;
+    width: 100%;
+    margin: 0 auto;
+    gap: 12px;
+}
+
+.updateAccount_form_group label{
+    font-size: larger;
+    color: #58595b;
+}
+
+.updateAccount_form_group input{
+    padding: 10px;
+    font-size: medium;
+    background-color: rgb(245 246 246);
+    border-color: #d0b49e;
+}
+
+.updateAccount_form_group input:focus{
+    padding: 10px;
+    font-size: medium;
+    background-color: rgb(245 246 246);
+    border-color: #d0b49e;
+}
+
+.updateAccount_form_group{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.updateAccount_form_group .row .col {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.btn-primary-update{
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: large;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border-color: #fff;
+    background-color: #d0b49e;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-primary-update:hover{
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: large;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border-color: #fff;
+    background-color: #c3ae9e;
+    color: #fff;
+}
