@@ -1,6 +1,22 @@
 <?php
 session_start();
 $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
+
+$maDiaChi = $_GET['maDiaChi'];
+$diaChi = "";
+
+$conn = mysqli_connect("localhost", "root", "", "webbanhang");
+if (!$conn) {
+  echo "Ket noi khong thanh cong: " . mysqli_connect_error();
+} else {
+  $sql = "SELECT * FROM diachi WHERE maDiaChi = '$maDiaChi'";
+  $result = mysqli_query($conn, $sql);
+  if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+      $diaChi = $row['tenDiaChi'];
+    }
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -191,51 +207,80 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
 
       <div class="card card-right" style="width: 70%;">
         <div class="card-body">
-          <h5 class="card-title">Địa chỉ của tôi</h5>
-          <?php
-          $conn = mysqli_connect("localhost", "root", "", "webbanhang");
-          if ($conn->connect_error) {
-            die("Kết nối thất bại: " . $conn->connect_error);
-          }
-          $sql1 = "SELECT diachi.tenDiaChi, diachi.tinhTrang, diachi.maDiaChi FROM khachhang 
-                INNER JOIN taikhoan ON khachhang.maTaiKhoan = taikhoan.maTaiKhoan
-                INNER JOIN diachi ON khachhang.maKhachHang = diachi.maKhachHang
-                WHERE taikhoan.tenTaiKhoan = '$username';
-                ";
-
-          $result = mysqli_query($conn, $sql1);
-          if (mysqli_num_rows($result) > 0) {
-            echo '
-                <table>
-                  <thead>
-                    <th></th>
-                    <th></th>
-                  </thead>
-                ';
-            while ($row = mysqli_fetch_assoc($result)) {
-              echo '
-                    <tbody>
-                      <tr>
-                        <td>' . $row['tenDiaChi'] . '</td>
-                        <td>' . ($row['tinhTrang']== 1 ? '<div class="default-address">Mặc định</div>' : '') . '</td>
-                        <td>
-                          <a href="./editaddress.php?maDiaChi=' . $row["maDiaChi"] . '">Sửa</a>
-                          <a onclick = "return confirm(\'Bạn có muốn xóa\');" href="./deleteaddress.php?maDiaChi=' . $row["maDiaChi"] . '">Xóa</a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  ';
-            }
-            echo '</table>';
-          } else {
-            echo 'Không có địa chỉ !!!<br>';
-          }
-          ?>
-          <a href="./addnewaddress.php" style="margin: 0 auto;">Thêm địa chỉ mới</a>
+          <h5 class="card-title">Sửa địa chỉ</h5>
+          <form id="changePasswordForm" method="POST">
+            <div class="updateAccount_form_group">
+              <label>Địa chỉ</label>
+              <input type="text" id="editaddress" name="editaddress" value="<?php echo $diaChi ?>">
+            </div>
+            <label>
+              <input type="checkbox" id="setDefault" name="setDefault" value="1"> Đặt làm địa chỉ mặc định
+            </label>
+            <div class="updateAccount_form_group">
+              <button type="submit" class="btn-primary-update">Lưu</button>
+          </form>
+          <a href="./address.php" style="margin: 0 auto;">Quay lại</a>
         </div>
       </div>
     </div>
   </div>
+  <?php
+  if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    $editAdress = $_POST['editaddress'];
+    $setDefault = isset($_POST['setDefault']) ? $_POST['setDefault'] : 0;
+
+    $conn = mysqli_connect("localhost", "root", "", "webbanhang");
+
+    if ($setDefault == 1) {
+      // Đặt các địa chỉ khác thành ko mặc định
+      $sqlUpdateOthers = "UPDATE diachi SET tinhTrang = 0 WHERE maKhachHang = '$makhach' AND maDiaChi != '$maDiaChi'";
+
+      // Chuyển địa chỉ hiện tại thành mặc định
+      $sqlUpdateMe = "UPDATE diachi SET tinhTrang = 1 WHERE maKhachHang = '$makhach' AND maDiaChi = '$maDiaChi'";
+      $resultUpdateOthers = mysqli_query($conn, $sqlUpdateOthers);
+      
+      if (!$resultUpdateOthers) {
+        mysqli_rollback($conn);
+        echo '<script>
+                alert("Lỗi khi cập nhật địa chỉ khác về tinhTrang = 0");
+                window.location.href = "./address.php";
+                </script>';
+        exit();
+      }
+
+      $resultUpdateMe = mysqli_query($conn, $sqlUpdateMe);
+      if (!$sqlUpdateMe) {
+        mysqli_rollback($conn);
+        echo '<script>
+                alert("Lỗi khi cập nhật địa chỉ hiện tại về tinhTrang = 1");
+                window.location.href = "./address.php";
+                </script>';
+        exit();
+      }
+    }
+
+    if (!$conn) {
+      echo "Ket noi khong thanh cong: " . mysqli_connect_error();
+    } else {
+      $sqlUpdateAddress = "UPDATE diachi SET tenDiaChi ='" . $editAdress . "' WHERE maDiaChi = '" . $maDiaChi . "' ";
+      $resultUpdateAddress = mysqli_query($conn, $sqlUpdateAddress);
+      if (!$resultUpdateAddress) {
+        mysqli_rollback($conn);
+        echo '<script>
+            alert("Sửa địa chỉ thất bại");
+            window.location.href = "./address.php";
+            </script>';
+        exit();
+      }else{
+        echo '<script>
+        alert("Sửa địa chỉ thành công");
+        window.location.href = "./address.php";
+        </script>';
+      }
+
+    }
+  }
+  ?>
   <footer class="footer">
     <div class="container">
       <div class="footer--top">

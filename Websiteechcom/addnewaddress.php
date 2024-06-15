@@ -191,51 +191,57 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
 
       <div class="card card-right" style="width: 70%;">
         <div class="card-body">
-          <h5 class="card-title">Địa chỉ của tôi</h5>
-          <?php
-          $conn = mysqli_connect("localhost", "root", "", "webbanhang");
-          if ($conn->connect_error) {
-            die("Kết nối thất bại: " . $conn->connect_error);
-          }
-          $sql1 = "SELECT diachi.tenDiaChi, diachi.tinhTrang, diachi.maDiaChi FROM khachhang 
-                INNER JOIN taikhoan ON khachhang.maTaiKhoan = taikhoan.maTaiKhoan
-                INNER JOIN diachi ON khachhang.maKhachHang = diachi.maKhachHang
-                WHERE taikhoan.tenTaiKhoan = '$username';
-                ";
-
-          $result = mysqli_query($conn, $sql1);
-          if (mysqli_num_rows($result) > 0) {
-            echo '
-                <table>
-                  <thead>
-                    <th></th>
-                    <th></th>
-                  </thead>
-                ';
-            while ($row = mysqli_fetch_assoc($result)) {
-              echo '
-                    <tbody>
-                      <tr>
-                        <td>' . $row['tenDiaChi'] . '</td>
-                        <td>' . ($row['tinhTrang']== 1 ? '<div class="default-address">Mặc định</div>' : '') . '</td>
-                        <td>
-                          <a href="./editaddress.php?maDiaChi=' . $row["maDiaChi"] . '">Sửa</a>
-                          <a onclick = "return confirm(\'Bạn có muốn xóa\');" href="./deleteaddress.php?maDiaChi=' . $row["maDiaChi"] . '">Xóa</a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  ';
-            }
-            echo '</table>';
-          } else {
-            echo 'Không có địa chỉ !!!<br>';
-          }
-          ?>
-          <a href="./addnewaddress.php" style="margin: 0 auto;">Thêm địa chỉ mới</a>
+          <h5 class="card-title">Thêm địa chỉ mới</h5>
+          <form id="changePasswordForm" method="POST">
+            <div class="updateAccount_form_group">
+              <label>Địa chỉ</label>
+              <input type="text" id="newaddress" name="newaddress">
+            </div>
+            <div class="updateAccount_form_group">
+              <button type="submit" class="btn-primary-update">Thêm</button>
+          </form>
+          <a href="./address.php" style="margin: 0 auto;">Quay lại</a>
         </div>
       </div>
     </div>
   </div>
+  <?php
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        $newaddress = $_POST['newaddress'];
+
+        $conn = mysqli_connect("localhost", "root", "", "webbanhang");
+        if (!$conn) {
+            echo "Ket noi khong thanh cong: " . mysqli_connect_error();
+        } else {
+          $sql1 = "SELECT maKhachHang FROM khachhang 
+          INNER JOIN taikhoan ON khachhang.maTaiKhoan = taikhoan.maTaiKhoan 
+          WHERE taikhoan.tenTaiKhoan = '$username'"
+          ;
+          $result1 = mysqli_query($conn, $sql1);
+          if (mysqli_num_rows($result1) > 0) {
+            $row = mysqli_fetch_assoc($result1);
+            $makhach = $row['maKhachHang'];
+
+            // Thực hiện INSERT vào bảng diachi
+            $sql2 = "INSERT INTO diachi (maKhachHang, tenDiaChi, tinhTrang) VALUES ('$makhach', '$newaddress', 0)";
+            $result2 = mysqli_query($conn, $sql2);
+            if ($result2>0) {
+              echo '<script>
+                alert("Thêm địa chỉ thành công");
+                window.location.href = "./address.php";
+                </script>';
+            } else {
+              echo '<script>
+                alert("Thêm địa chỉ thất bại");
+                window.location.href = "./accountcustomer.php";
+                </script>';
+            }
+          }else{
+            echo "Không tìm thấy mã khách hàng";
+          }
+        }
+    }
+  ?>
   <footer class="footer">
     <div class="container">
       <div class="footer--top">
