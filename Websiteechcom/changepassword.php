@@ -1,7 +1,46 @@
 <?php
 session_start();
 $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
-  
+
+$conn = mysqli_connect("localhost", "root", "", "webbanhang");
+if ($conn->connect_error) {
+  die("Kết nối thất bại: " . $conn->connect_error);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // Lấy dữ liệu từ form và gọi hàm lưu dữ liệu vào CSDL
+  $oldPass = $_POST["oldPass"];
+  $newPass = $_POST["newPass"];
+
+  $sql1 = $conn->prepare("SELECT matKhau FROM taikhoan WHERE tenTaiKhoan = ?");
+  $sql1->bind_param("s", $username);
+  $sql1->execute();
+  $result = $sql1->get_result();
+
+  if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $pass = $row['matKhau'];
+    if ($oldPass == $pass) {
+      // Cập nhật mật khẩu mới vào cơ sở dữ liệu
+      $sql = $conn->prepare("UPDATE taikhoan SET matKhau = ? WHERE tenTaiKhoan = ?");
+      $sql->bind_param("ss", $newPass, $username);
+      if ($sql->execute() === TRUE) {
+        echo '<script>
+          alert("Đổi mật khẩu thành công");
+          window.location.href = "./accountcustomer.php";
+        </script>';
+        exit();
+      } else {
+        echo "Error: " . $sql->error;
+      }
+    } else {
+      echo '<script>
+        alert("Vui lòng nhập đúng mật khẩu cũ");
+      </script>';
+    }
+  }
+  $sql1->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -154,32 +193,17 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
             }
             $sql = "SELECT khachhang.hoTen, khachhang.email, khachhang.soDienThoai, khachhang.maDiaChi, khachhang.maKhachHang FROM taikhoan
             INNER JOIN khachhang ON taikhoan.maTaiKhoan = khachhang.maTaiKhoan WHERE taikhoan.tenTaiKhoan = '$username'";
-            
-            $sql2 = "SELECT diachi.tenDiaChi FROM khachhang 
-            INNER JOIN taikhoan ON khachhang.maTaiKhoan = taikhoan.maTaiKhoan
-            INNER JOIN diachi ON khachhang.maKhachHang = diachi.maKhachHang
-            WHERE taikhoan.tenTaiKhoan = '$username' AND diachi.tinhTrang = 1;
-            ";
-
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
               while ($row = mysqli_fetch_assoc($result)) {
                 $name = $row["hoTen"];
                 $mail = $row["email"];
                 $sdt = $row["soDienThoai"];
+                $diachi = $row["maDiaChi"];
                 $makhach = $row["maKhachHang"];
               }
             } else {
               echo "Không có kết quả";
-            }
-
-            $result2 = mysqli_query($conn, $sql2);
-            if (mysqli_num_rows($result2) > 0) {
-              while ($row = mysqli_fetch_assoc($result2)) {
-                $diachi = $row["tenDiaChi"];
-              }
-            }else{
-              $diachi = ""; // không có địa chỉ thì ko hiện gì
             }
             mysqli_close($conn);
             ?>
@@ -197,7 +221,7 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
           </li>
           <hr>
           <li class="list-group-item">
-            <p><a class="link-opacity-100 text-body-secondary" href="./address.php">Địa chỉ giao hàng</a></p>
+            <p><a class="link-opacity-100 text-body-secondary" href="#">Địa chỉ giao hàng</a></p>
           </li>
           <hr>
           <li class="list-group-item">
@@ -208,23 +232,25 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
 
       <div class="card card-right" style="width: 70%;">
         <div class="card-body">
-          <h5 class="card-title">Thông tin tài khoản khách hàng</h5>
-          <hr>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <p>Tên: <?php echo $name; ?><br>
-                Email: <?php echo $mail; ?><br>
-                Số điện thoại: <?php echo $sdt; ?></p>
-            </li>
-            <hr>
-            <li class="list-group-item">
-              <p>Địa chỉ: <?php echo $diachi; ?></p>
-            </li>
-          </ul>
-          <a href="./changepassword.php" class="btn-changepass">Đổi mật khẩu</a>
+          <h5 class="card-title">Đổi mật khẩu</h5>
+          <form id="changePasswordForm" method="POST">
+            <div class="updateAccount_form_group">
+              <label>Mật khẩu cũ</label>
+              <input type="password" id="oldPass" name="oldPass">
+              <span id="oldPassError" style="color: red;"></span>
+            </div>
+            <div class="updateAccount_form_group">
+              <label>Mật khẩu mới</label>
+              <input type="password" id="newPass" name="newPass">
+              <span id="newPassError" style="color: red;"></span>
+            </div>
+            <div class="updateAccount_form_group">
+              <button type="submit" class="btn-primary-update">Lưu</button>
+          </form>
         </div>
       </div>
     </div>
+  </div>
 
   </div>
 

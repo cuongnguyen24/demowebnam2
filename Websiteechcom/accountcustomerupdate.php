@@ -191,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (!$conn) {
               die("Connection failed: " . mysqli_connect_error());
             }
-            $sql = "SELECT khachhang.hoTen, khachhang.email, khachhang.soDienThoai, khachhang.diaChi FROM taikhoan
+            $sql = "SELECT khachhang.hoTen, khachhang.email, khachhang.soDienThoai, khachhang.maDiaChi FROM taikhoan
             INNER JOIN khachhang ON taikhoan.maTaiKhoan = khachhang.maTaiKhoan WHERE taikhoan.tenTaiKhoan = '$username'";
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
@@ -199,7 +199,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $name = $row["hoTen"];
                 $mail = $row["email"];
                 $sdt = $row["soDienThoai"];
-                $diachi = $row["diaChi"];
+                $diachi = $row["maDiaChi"];
               }
             } else {
               echo "Không có kết quả";
@@ -220,7 +220,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           </li>
           <hr>
           <li class="list-group-item">
-            <p><a class="link-opacity-100 text-body-secondary" href="#">Địa chỉ giao hàng</a></p>
+            <p><a class="link-opacity-100 text-body-secondary" href="./address.php">Địa chỉ giao hàng</a></p>
           </li>
           <hr>
           <li class="list-group-item">

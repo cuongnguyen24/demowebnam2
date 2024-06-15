@@ -400,3 +400,22 @@ hr{
     background-color: #c3ae9e;
     color: #fff;
 }
+
+/* Adress.php */
+.card-body table{
+    width: 100%;
+    background-color: #dfdfdf;
+    border-radius: 10px;
+}
+
+.card-body table a{
+    padding-left: 10px;
+}
+
+.card-body table td{
+    padding: 20px;
+}
+
+.default-address {
+    color: red;
+}

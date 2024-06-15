@@ -1,7 +1,6 @@
 <?php
 session_start();
 $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
-  
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -138,7 +137,6 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
       </div>
     </div>
   </header>
-
   <div class="main__layout__account">
     <div class="main__layout__container main__layout__container__2">
       <div class="card card-left" style="width: 30%; height: 100%">
@@ -154,32 +152,17 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
             }
             $sql = "SELECT khachhang.hoTen, khachhang.email, khachhang.soDienThoai, khachhang.maDiaChi, khachhang.maKhachHang FROM taikhoan
             INNER JOIN khachhang ON taikhoan.maTaiKhoan = khachhang.maTaiKhoan WHERE taikhoan.tenTaiKhoan = '$username'";
-            
-            $sql2 = "SELECT diachi.tenDiaChi FROM khachhang 
-            INNER JOIN taikhoan ON khachhang.maTaiKhoan = taikhoan.maTaiKhoan
-            INNER JOIN diachi ON khachhang.maKhachHang = diachi.maKhachHang
-            WHERE taikhoan.tenTaiKhoan = '$username' AND diachi.tinhTrang = 1;
-            ";
-
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
               while ($row = mysqli_fetch_assoc($result)) {
                 $name = $row["hoTen"];
                 $mail = $row["email"];
                 $sdt = $row["soDienThoai"];
+                $diachi = $row["maDiaChi"];
                 $makhach = $row["maKhachHang"];
               }
             } else {
               echo "Không có kết quả";
-            }
-
-            $result2 = mysqli_query($conn, $sql2);
-            if (mysqli_num_rows($result2) > 0) {
-              while ($row = mysqli_fetch_assoc($result2)) {
-                $diachi = $row["tenDiaChi"];
-              }
-            }else{
-              $diachi = ""; // không có địa chỉ thì ko hiện gì
             }
             mysqli_close($conn);
             ?>
@@ -197,7 +180,7 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
           </li>
           <hr>
           <li class="list-group-item">
-            <p><a class="link-opacity-100 text-body-secondary" href="./address.php">Địa chỉ giao hàng</a></p>
+            <p><a class="link-opacity-100 text-body-secondary" href="#">Địa chỉ giao hàng</a></p>
           </li>
           <hr>
           <li class="list-group-item">
@@ -208,26 +191,51 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
 
       <div class="card card-right" style="width: 70%;">
         <div class="card-body">
-          <h5 class="card-title">Thông tin tài khoản khách hàng</h5>
-          <hr>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <p>Tên: <?php echo $name; ?><br>
-                Email: <?php echo $mail; ?><br>
-                Số điện thoại: <?php echo $sdt; ?></p>
-            </li>
-            <hr>
-            <li class="list-group-item">
-              <p>Địa chỉ: <?php echo $diachi; ?></p>
-            </li>
-          </ul>
-          <a href="./changepassword.php" class="btn-changepass">Đổi mật khẩu</a>
+          <h5 class="card-title">Địa chỉ của tôi</h5>
+          <?php
+          $conn = mysqli_connect("localhost", "root", "", "webbanhang");
+          if ($conn->connect_error) {
+            die("Kết nối thất bại: " . $conn->connect_error);
+          }
+          $sql1 = "SELECT diachi.tenDiaChi, diachi.tinhTrang FROM khachhang 
+                INNER JOIN taikhoan ON khachhang.maTaiKhoan = taikhoan.maTaiKhoan
+                INNER JOIN diachi ON khachhang.maKhachHang = diachi.maKhachHang
+                WHERE taikhoan.tenTaiKhoan = '$username';
+                ";
+
+          $result = mysqli_query($conn, $sql1);
+          if (mysqli_num_rows($result) > 0) {
+            echo '
+                <table>
+                  <thead>
+                    <th></th>
+                    <th></th>
+                  </thead>
+                ';
+            while ($row = mysqli_fetch_assoc($result)) {
+              echo '
+                    <tbody>
+                      <tr>
+                        <td>' . $row['tenDiaChi'] . '</td>
+                        <td>' . ($row['tinhTrang']== 1 ? '<div class="default-address">Mặc định</div>' : '') . '</td>
+                        <td>
+                          <a href="#">Sửa</a>
+                          <a href="#">Xóa</a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  ';
+            }
+            echo '</table>';
+          } else {
+            echo 'Không có địa chỉ !!!<br>';
+          }
+          ?>
+          <a href="#" style="margin: 0 auto;">Thêm địa chỉ mới</a>
         </div>
       </div>
     </div>
-
   </div>
-
   <footer class="footer">
     <div class="container">
       <div class="footer--top">
@@ -297,14 +305,6 @@ $username = $_SESSION["username"]; // Lấy tên tài khoản từ session
       </div>
     </div>
   </footer>
-
-  <?php
-  $conn = mysqli_connect('localhost', 'root', '', 'webbanhang');
-  if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-  }
-
-  ?>
 </body>
 
 </html>
